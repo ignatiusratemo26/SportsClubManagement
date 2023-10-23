@@ -13,8 +13,8 @@ public class deregistrationWindow{
     private JPanel mainPanel;
     private JTable resultTable;
     private JScrollPane resultScrollPane;
-    private Object [] queryObj;
     private int searchID;
+    private String queryString;
     Connection connection = DBConnectionManager.getConnection();
 
     
@@ -36,15 +36,14 @@ public class deregistrationWindow{
         deregisterButton.setBackground(new Color(205, 17, 50));
         deregisterButton.setForeground(Color.WHITE);
         mainPanel = new JPanel(new FlowLayout());
-        queryObj = new Object[2];
+
         
         searchButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                //resultLabel.setText("<<Member ID>> : <<Name>>");
                 searchID = Integer.parseInt(memberIdField.getText());
-                queryObj = (Object[]) fetchData();
-                resultLabel.setText((String) queryObj[0]);
+                queryString = fetchData();
+                resultLabel.setText(queryString);
             }            
         });
         
@@ -68,9 +67,9 @@ public class deregistrationWindow{
         frame.setVisible(true);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
     }
-    private Object fetchData(){
+    private String fetchData(){
         try(
-                Statement statement = connection.createStatement()) {
+            Statement statement = connection.createStatement()) {
             System.out.println("Database connection established.");
             String query = "SELECT " +
                     "member_id, " +
@@ -79,16 +78,15 @@ public class deregistrationWindow{
                     "WHERE member_id = "+ searchID;
 
             try (ResultSet resultSet = statement.executeQuery(query)) {
-                int row = 0;
                 while (resultSet.next()) {
-                    queryObj[0] = resultSet.getObject("member_id");
-                    queryObj[1] = (String) resultSet.getObject("member_name");
-                    row++;
+                    String id = resultSet.getString("member_id");
+                    String name = resultSet.getString("member_name");
+                    queryString = ("ID: "+ id +" \t Name: " + name);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return queryObj;
+        return queryString;
     }    
 }

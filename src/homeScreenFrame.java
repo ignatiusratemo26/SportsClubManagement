@@ -16,7 +16,7 @@ public class homeScreenFrame extends JFrame{
     public homeScreenFrame(){
 
         getContentPane().setBackground(new Color(31,81,255));
-        setSize(1100, 480);
+        setSize(800, 480);
         setLayout(new GridLayout(4,3));
         setTitle("MARINGO SPORTS CLUB SYSTEM");
         memberTitle = new JLabel();
@@ -136,7 +136,7 @@ public class homeScreenFrame extends JFrame{
         updateStockLabel.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                new updateStockWindow1();
+                new updateStockWindow();
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -160,16 +160,15 @@ public class homeScreenFrame extends JFrame{
             @Override
             public void mouseExited(MouseEvent e) {}        });
         
-        add(memberTitle); add(shopStockTitle); add(viewReportTitle); add(facilitationTitle);
-        add(registrationLabel);add(shopLabel); add(viewLabel); add(facilitationLabel);
-        add(deregistrationLabel); add(updateStockLabel); add(reportLabel); add(groupMembershipLabel);
-        add(checkMembershipLabel); add(addItemsLabel); add(discardLabel); add(sportsDetailsLabel);
+        add(memberTitle); add(shopStockTitle); add(viewReportTitle); //add(facilitationTitle);
+        add(registrationLabel);add(shopLabel); add(viewLabel); //add(facilitationLabel);
+        add(deregistrationLabel); add(updateStockLabel); add(reportLabel); //add(groupMembershipLabel);
+        add(checkMembershipLabel); add(addItemsLabel); add(discardLabel);// add(sportsDetailsLabel);
         
         setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        DBConnectionManager.closeConnection();
     }
     
 }

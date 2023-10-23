@@ -1,6 +1,6 @@
 public class MaringoSportsByIgnatius {
     public static void main(String[] args) {
-        new homeScreenFrame();
+        new LoginFrame();
     }
     
 }

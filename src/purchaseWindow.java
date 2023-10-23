@@ -88,6 +88,52 @@ public class purchaseWindow extends JFrame{
         receiptButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         receiptButton.setBackground(new Color(145, 17, 245));
         receiptButton.setForeground(Color.WHITE);
+        receiptButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    StringBuilder receipt = new StringBuilder("Receipt:\n\n");
+
+                    if (shoeBox.isSelected()) {
+                        int value8 = (Integer) shoeSpinner.getValue();
+                        receipt.append(value8).append(" x Sneakers @2000/=").append(" : Ksh.").append(value8 * 2000).append("\n");
+                    }
+                    if (shortsBox.isSelected()) {
+                        int value7 = (Integer) shortsSpinner.getValue();
+                        receipt.append(value7).append(" x Shorts @750/=").append(" : Ksh.").append(value7 * 750).append("\n");
+                    }
+                    if (tracksuitBox.isSelected()) {
+                        int value1 = (Integer) tracksuitSpinner.getValue();
+                        receipt.append(value1).append(" x TrackSuit @1000/=").append(" : Ksh.").append(value1 * 1000).append("\n");
+                    }
+                    if (bloomerBox.isSelected()) {
+                        int value2 = (Integer) bloomerSpinner.getValue();
+                        receipt.append(value2).append(" x Bloomer @250/=").append(" : Ksh.").append(value2 * 250).append("\n");
+                    }
+                    if (hockeyBox.isSelected()) {
+                        int value3 = (Integer) hockeySpinner.getValue();
+                        receipt.append(value3).append(" x Hockey stick @2000/=").append(" : Ksh.").append(value3 * 2000).append("\n");
+                    }
+                    if (wrapperBox.isSelected()) {
+                        int value4 = (Integer) wrapperSpinner.getValue();
+                        receipt.append(value4).append(" x Wrapper @450/=").append(" : Ksh.").append(value4 * 450).append("\n");
+                    }
+                    if (socksBox.isSelected()) {
+                        int value5 = (Integer) socksSpinner.getValue();
+                        receipt.append(value5).append(" x Socks @350/=").append(" : Ksh.").append(value5 * 350).append("\n");
+                    }
+                    if (tshirtBox.isSelected()) {
+                        int value6 = (Integer) tshirtSpinner.getValue();
+                        receipt.append(value6).append(" x T-shirt @800/=").append(" : Ksh.").append(value6 * 800).append("\n");
+                    }
+
+                    receipt.append("\nTotal: Ksh.").append(totalText.getText());
+
+                    JOptionPane.showMessageDialog(null, receipt.toString(), "Receipt", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+        });
+        
+
         titleLabel.setText("MARINGO SHOP");
         titleLabel.setFont(new Font("CALIBRI", Font.BOLD, 15));
         titleLabel.setForeground(Color.BLUE);
@@ -131,12 +177,8 @@ public class purchaseWindow extends JFrame{
                 if(tshirtBox.isSelected()){
                     int value6 = (Integer) tshirtSpinner.getValue();
                     total += (value6 *800 );
-                }
-                
-                
+                }               
                 totalText.setText( String.valueOf(total));
-                
-                JOptionPane.showMessageDialog(null, total);
             }
         });
         

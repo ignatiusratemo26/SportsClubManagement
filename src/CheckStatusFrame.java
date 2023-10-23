@@ -55,10 +55,6 @@ public class CheckStatusFrame extends JFrame {
             return;
         }
 
-        String url = "jdbc:mysql://localhost:3306/your_database";
-        String user = "your_username";
-        String password = "your_password";
-
         try (Connection connection = DBConnectionManager.getConnection();) {
             String query = "SELECT * FROM Members WHERE member_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);

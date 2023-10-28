@@ -11,15 +11,11 @@ import net.miginfocom.swing.MigLayout;
 public class searchDamage extends JFrame{
     private String column [] = {"Loss ID", "Equipment ID", "Member ID", "Damage Fee"};
     private String data [] [] = {{"","","","","","",""}};
-    private JTable lostAndDamagedTable;
     private JScrollPane resultScrollPane;
     private JPanel resultPanel;
     private JLabel searchLabel;
     private JTextField searchText;
     private JButton searchButton;
-    ResultSet rs;
-    PreparedStatement post;
-    Connection con;
     DefaultTableModel model = new DefaultTableModel();
     
     public searchDamage(){
@@ -38,14 +34,12 @@ public class searchDamage extends JFrame{
             public void actionPerformed(ActionEvent e) {
             java.sql.Connection connection = DBConnectionManager.getConnection();
             try {
-                // Use the connection to execute SQL queries
                 PreparedStatement preparedStatement; 
                 preparedStatement = connection.prepareStatement("SELECT ,lostdamaged.member_id, members.member_name,equipments.equipment_id," + 
                     "equipments.equipment_name FROM lostdamaged" +
                     "INNER JOIN equipments ON lostdamaged.equipment_id = equipments.equipment_id" +
                     "INNER JOIN members ON lostdamaged.member_id = members.member_id;");
                 ResultSet rs = preparedStatement.executeQuery();
-                // Process the result set
                 int i =0;
                 while (rs.next()){
                     String member_id = rs.getString("member_id");

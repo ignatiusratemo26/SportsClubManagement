@@ -1,4 +1,3 @@
-//rgb color in home page 182, 222, 250
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,12 +12,11 @@ public class homeScreenFrame extends JFrame{
     private JLabel memberTitle, shopStockTitle, viewReportTitle, facilitationTitle, registrationLabel, deregistrationLabel;
     private JLabel checkMembershipLabel, shopLabel, updateStockLabel, addItemsLabel, viewLabel, reportLabel;
     private JLabel discardLabel, facilitationLabel, groupMembershipLabel, sportsDetailsLabel;
- 
+    
     public homeScreenFrame(){
-        
-        getContentPane().setBackground(new Color(85,160,200));
+
+        getContentPane().setBackground(new Color(31,81,255));
         setSize(1100, 480);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagesFolder/MaringoIcon.png")));
         setLayout(new GridLayout(4,3));
         setTitle("MARINGO SPORTS CLUB SYSTEM");
         memberTitle = new JLabel();
@@ -83,7 +81,7 @@ public class homeScreenFrame extends JFrame{
         checkMembershipLabel.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                new MembershipStatus();
+                new CheckStatusFrame();
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -97,7 +95,20 @@ public class homeScreenFrame extends JFrame{
         viewLabel.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                new viewEquipmentWindow();
+                new ViewDamageWindow();
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}        });
+        shopLabel.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new purchaseWindow();
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -108,16 +119,57 @@ public class homeScreenFrame extends JFrame{
             @Override
             public void mouseExited(MouseEvent e) {}        });
         
+        reportLabel.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new reportWindow();
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}        });
+        
+        updateStockLabel.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new updateStockWindow1();
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}        });
+        addItemsLabel.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JOptionPane.showMessageDialog(addItemsLabel, "You cannot add any item currently.");
+               }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}        });
+        
         add(memberTitle); add(shopStockTitle); add(viewReportTitle); add(facilitationTitle);
-        add(registrationLabel); add(shopLabel); add(viewLabel); add(facilitationLabel);
+        add(registrationLabel);add(shopLabel); add(viewLabel); add(facilitationLabel);
         add(deregistrationLabel); add(updateStockLabel); add(reportLabel); add(groupMembershipLabel);
         add(checkMembershipLabel); add(addItemsLabel); add(discardLabel); add(sportsDetailsLabel);
         
-    
         setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        DBConnectionManager.closeConnection();
     }
     
 }

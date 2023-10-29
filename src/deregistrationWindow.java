@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import java.sql.*;
 
 public class deregistrationWindow{
     private JFrame frame = new JFrame();
@@ -12,6 +13,10 @@ public class deregistrationWindow{
     private JPanel mainPanel;
     private JTable resultTable;
     private JScrollPane resultScrollPane;
+    private Object [] queryObj;
+    private int searchID;
+    Connection connection = DBConnectionManager.getConnection();
+
     
     public deregistrationWindow(){
         frame.setBackground(Color.WHITE);
@@ -21,15 +26,25 @@ public class deregistrationWindow{
         memberIdLabel = new JLabel("Enter Member ID: ");
         memberIdField = new JTextField(15);
         searchButton = new JButton("Search");
+        searchButton.setBorderPainted(false);
+        searchButton.setBackground(new Color(145, 17, 245));
+        searchButton.setForeground(Color.WHITE);
         //the label below will display the name of member you want to deregister
         resultLabel = new JLabel("<<Member ID>> : <<Name>>");
         deregisterButton = new JButton("Deregister");
+        deregisterButton.setBorderPainted(false);
+        deregisterButton.setBackground(new Color(205, 17, 50));
+        deregisterButton.setForeground(Color.WHITE);
         mainPanel = new JPanel(new FlowLayout());
-
+        queryObj = new Object[2];
+        
         searchButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                resultLabel.setText("<<Member ID>> : <<Name>>");
+                //resultLabel.setText("<<Member ID>> : <<Name>>");
+                searchID = Integer.parseInt(memberIdField.getText());
+                queryObj = (Object[]) fetchData();
+                resultLabel.setText((String) queryObj[0]);
             }            
         });
         
@@ -53,4 +68,27 @@ public class deregistrationWindow{
         frame.setVisible(true);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
     }
+    private Object fetchData(){
+        try(
+                Statement statement = connection.createStatement()) {
+            System.out.println("Database connection established.");
+            String query = "SELECT " +
+                    "member_id, " +
+                    "members.member_name " +
+                    "FROM maringodatabase.members "+
+                    "WHERE member_id = "+ searchID;
+
+            try (ResultSet resultSet = statement.executeQuery(query)) {
+                int row = 0;
+                while (resultSet.next()) {
+                    queryObj[0] = resultSet.getObject("member_id");
+                    queryObj[1] = (String) resultSet.getObject("member_name");
+                    row++;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return queryObj;
+    }    
 }

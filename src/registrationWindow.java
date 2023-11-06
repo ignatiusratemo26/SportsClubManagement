@@ -1,12 +1,11 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.sql.*;
-import java.util.Properties;
+
 import net.miginfocom.swing.MigLayout;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
-import org.jdatepicker.impl.*;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 public class registrationWindow extends JFrame {
     private JTextField institutionField, contactField, dobField, heightField, nameField;
@@ -16,13 +15,10 @@ public class registrationWindow extends JFrame {
     private JLabel nokLabel, regFeeLabel, subcountyLabel, weightLabel;
     private JButton clearButton, submitButton;
     private JPanel mainPanel;
-    
+    private int game_id= 0;
+    private String genderText= "";
         //sql connectivity
-    private final String db_url = "jdbc:mysql://localhost:3306/testdb";
-    private final String db_driver = "com.mysql.jdbc.Driver";
-    private final String db_username = "root";
-    private final String db_password = "18145C3iggy?";
-    
+    Connection connection = DBConnectionManager.getConnection();
     
     public registrationWindow() {
         setSize(680,600);
@@ -30,12 +26,12 @@ public class registrationWindow extends JFrame {
         // in the miglayout, 1st parameter: general layout, 2nd parameter: columns & spacing, 3rd: rows & spacing
         mainPanel = new JPanel(new MigLayout("wrap, insets 20, fill", "[]2[]2[]", "10"));
         mainPanel.setBackground(Color.WHITE);
-        nameLabel = new JLabel("Name");
+        nameLabel = new JLabel("Full Name");
         nameLabel.setToolTipText("Enter your full name");
         institutionLabel = new JLabel("Institution");
         genderLabel = new JLabel("Gender");
         nokLabel = new JLabel("Next Of Kin(contact)");
-        dobLabel = new JLabel("Date of Birth");
+        dobLabel = new JLabel("Date of Birth (yyyy-mm-dd)");
         contactLabel = new JLabel("Contact");
         subcountyLabel = new JLabel("Sub County");
         gameLabel = new JLabel("Sport of interest");
@@ -51,18 +47,10 @@ public class registrationWindow extends JFrame {
         genderField = new JComboBox(gender);
         nokField = new javax.swing.JTextField(8);
         dobField = new JTextField(8);
-        UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        JDatePanelImpl datePanel;
-        datePanel = new JDatePanelImpl(model, p);
-        //JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        //java.sql.Date dobField = (java.sql.Date) datePicker.getModel().getValue();
         String games [] = {"", "Badminton","Baseball","Basketball","Chess", "Darts","Draft",
             "Football", "Hockey", "Lawn tennis", "Netball" ,"Pool", "Swimming", "Table tennis", "Tennis",  "Volleyball",
                "Rugby"};
+                
         gameField = new JComboBox(games);
         contactField = new JTextField(8);
         String subcounties [] = {"","Majirani","Kongoea", "Huckleberry","Watamu", "Nashville", "Dakota"};
@@ -81,16 +69,161 @@ public class registrationWindow extends JFrame {
         submitButton = new JButton("Submit");
         submitButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         submitButton.setBackground(new Color(145, 17, 245));
-        submitButton.setForeground(Color.WHITE);
+        submitButton.setForeground(Color.WHITE);           
+        submitButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String name = nameField.getText();
+            String nok = nokField.getText();
+            if (male.isSelected()){
+                genderText = "male";
+            }
+            else
+                genderText = "female";
+            String dob = dobField.getText();  
+            // Validate date of birth (DOB)
+                if (!dob.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                    JOptionPane.showMessageDialog(null, "Invalid date of birth. Please use the format yyyy-mm-dd.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            
+            
+            int contact = Integer.parseInt(contactField.getText());
+            String subcounty = subcountyField.getSelectedItem().toString();
+            String institution = institutionField.getText();  
+            switch (gameField.getSelectedItem().toString()) {
+            case "Badminton":
+                game_id = 6;
+                break;
+            case "Baseball":
+                game_id = 11;
+                break;
+            case "Basketball":
+                game_id = 8;
+                break;
+            case "Chess":
+                game_id = 14;
+                break;
+            case "Darts":
+                game_id = 5;
+                break;
+            case "Draft":
+                game_id = 15;
+                break;
+            case "Football":
+                game_id = 10;
+                break;
+            case "Hockey":
+                game_id = 2;
+                break;
+            case "Lawn tennis":
+                game_id = 3;
+                break;
+            case "Netball":
+                game_id = 9;
+                break;
+            case "Pool":
+                game_id = 13;
+                break;
+            case "Swimming":
+                game_id = 1;
+                break;
+            case "Table Tennis":
+                game_id = 4;
+                break;
+            case "Lawn Tennis":
+                game_id = 3;
+                break;
+            case "Volleyball":
+                game_id = 7;
+                break;
+            case "Rugby":
+                game_id = 12;
+                break;
+            } 
+            String weight = weightField.getText();
+            String height = heightField.getText();
+            // Validate weight and height (optional, you can modify the regex as needed)
+                if (!weight.matches("\\d+(\\.\\d+)?")) {
+                    JOptionPane.showMessageDialog(null, "Invalid weight. Please enter a valid numeric value.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (!height.matches("\\d+(\\.\\d+)?")) {
+                    JOptionPane.showMessageDialog(null, "Invalid height. Please enter a valid numeric value.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+            String fee = regFeeField.getSelectedItem().toString();
+            
+            
+            // Validate contact number
+                try {
+                    contact = Integer.parseInt(contactField.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Invalid contact number. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
+                // Validate date of birth (DOB)
+                if (!dob.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                    JOptionPane.showMessageDialog(null, "Invalid date of birth. Please use the format yyyy-mm-dd.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                int registration_fee;
+
+                if (fee.equals("Individual")) {
+                    registration_fee = 1000;
+                } else if (fee.equals("Group")) {
+                    registration_fee = 500;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid registration fee. Please select a valid option.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Validate weight and height (optional, you can modify the regex as needed)
+                if (!weight.matches("\\d+(\\.\\d+)?")) {
+                    JOptionPane.showMessageDialog(null, "Invalid weight. Please enter a valid numeric value.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (!height.matches("\\d+(\\.\\d+)?")) {
+                    JOptionPane.showMessageDialog(null, "Invalid height. Please enter a valid numeric value.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }     
+
+            String query = "INSERT INTO Members "
+                    + "(member_name, next_of_kin, gender, dob, contact, subcounty, "
+                    + "institution, sport_id, weight, height, registration_fee) "
+                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, name);
+                ps.setString(2, nok);
+                ps.setString(3, genderText);
+                ps.setString(4, dob);
+                ps.setInt(5, contact);
+                ps.setString(6, subcounty);
+                ps.setString(7, institution);
+                ps.setInt(8, game_id);
+                ps.setString(9, weight);
+                ps.setString(10, height);
+                ps.setInt(11, registration_fee);
+
+                int x = ps.executeUpdate();
+                   } catch (SQLException ex) {
+                    System.out.println(ex);
+                    }
+            JOptionPane.showMessageDialog(null, "Registration complete");
+            }                       
+            });
+        
         mainPanel.add(nameLabel);
         mainPanel.add(nameField, "wrap");
         mainPanel.add(nokLabel);
         mainPanel.add(nokField, "wrap");
         mainPanel.add(genderLabel);
         mainPanel.add(female);
-        mainPanel.add(male, "wrap");
-        
+        mainPanel.add(male, "wrap");        
         mainPanel.add(dobLabel);
         mainPanel.add(dobField, "wrap");
         mainPanel.add(contactLabel);
@@ -112,36 +245,7 @@ public class registrationWindow extends JFrame {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().add(mainPanel);
-        //pack();
         setVisible(true);
         setLocationRelativeTo(null);
-    }
-    
-    
-    public void thinkOfaMethod() throws Exception{
-        String name = nameField.getText();
-        String age = institutionField.getText();
-        String gender = genderField.getSelectedItem().toString();
-        String dob = dobField.getText();
-        int contact = Integer.parseInt(contactField.getText());
-        String subcounty = subcountyField.getSelectedItem().toString();
-        int game_id = Integer.parseInt(gameField.getSelectedItem().toString());
-        
-        String weight = weightField.getText();
-        String height = heightField.getText();
-        String special_needs = regFeeField.getSelectedItem().toString();
-        
-        String query = "INSERT INTO Members("+ name +","+ age +","+ gender+ "," + dob + ","
-                + ","+ contact +"," +subcounty+ "," + ","+game_id+"," +weight+ ","+ height+ ","+ special_needs+")";
-
-        
-        
-        Class.forName(db_driver);
-        Connection con = DriverManager.getConnection(db_url, db_username, db_password);
-        Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery(query);
-
-    }
-    //thinkOfaMethod();
-    
+    } 
 }

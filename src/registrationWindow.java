@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.sql.*;
-
 import net.miginfocom.swing.MigLayout;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
@@ -47,6 +46,7 @@ public class registrationWindow extends JFrame {
         genderField = new JComboBox(gender);
         nokField = new javax.swing.JTextField(8);
         dobField = new JTextField(8);
+        
         String games [] = {"", "Badminton","Baseball","Basketball","Chess", "Darts","Draft",
             "Football", "Hockey", "Lawn tennis", "Netball" ,"Pool", "Swimming", "Table tennis", "Tennis",  "Volleyball",
                "Rugby"};
@@ -174,14 +174,9 @@ public class registrationWindow extends JFrame {
 
                 if (fee.equals("Individual")) {
                     registration_fee = 1000;
-                } else if (fee.equals("Group")) {
+                } else
                     registration_fee = 500;
-                } else {
-                    JOptionPane.showMessageDialog(null, "Invalid registration fee. Please select a valid option.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
 
-                // Validate weight and height (optional, you can modify the regex as needed)
                 if (!weight.matches("\\d+(\\.\\d+)?")) {
                     JOptionPane.showMessageDialog(null, "Invalid weight. Please enter a valid numeric value.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;

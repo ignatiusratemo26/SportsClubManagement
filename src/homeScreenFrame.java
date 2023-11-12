@@ -4,8 +4,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
-import javax.swing.GroupLayout.*;
-import java.sql.*; 
 
 public class homeScreenFrame extends JFrame{
     //instantiating the labels that will act as the application's menu(clickable labels)

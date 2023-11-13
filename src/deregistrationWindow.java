@@ -47,12 +47,19 @@ public class deregistrationWindow{
             }            
         });
         
-        deregisterButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainPanel, "<<name>> deregistered successfully");
+        deregisterButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int confirmation = JOptionPane.showConfirmDialog(mainPanel, "Do you want to deregister this member?", "Confirm Deregistration", JOptionPane.YES_NO_OPTION);
+            if (confirmation == JOptionPane.YES_OPTION) {
+                if (deleteMember(searchID)) {
+                    JOptionPane.showMessageDialog(mainPanel, "Member deregistered successfully");
+                } else {
+                    JOptionPane.showMessageDialog(mainPanel, "Failed to deregister member");
+                }
                 frame.dispose();
-            }            
+            }
+        }
         });
         mainPanel.add(searchLabel);
         mainPanel.add(memberIdLabel);
@@ -88,5 +95,18 @@ public class deregistrationWindow{
             e.printStackTrace();
         }
         return queryString;
-    }    
+    }
+    private boolean deleteMember(int memberId) {
+        try {
+            String deleteQuery = "DELETE FROM Members WHERE member_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+                preparedStatement.setInt(1, memberId);
+                int rowsAffected = preparedStatement.executeUpdate();
+                return rowsAffected > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    } 
 }

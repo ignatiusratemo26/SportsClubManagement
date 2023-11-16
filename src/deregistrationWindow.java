@@ -38,15 +38,13 @@ public class deregistrationWindow{
         mainPanel = new JPanel(new FlowLayout());
 
         
-        searchButton.addActionListener(new ActionListener(){
+        searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 searchID = Integer.parseInt(memberIdField.getText());
-                queryString = fetchData();
-                resultLabel.setText(queryString);
-            }            
+                fetchData();
+            }
         });
-        
         deregisterButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -74,27 +72,28 @@ public class deregistrationWindow{
         frame.setVisible(true);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
     }
-    private String fetchData(){
-        try(
-            Statement statement = connection.createStatement()) {
+    private void fetchData() {
+        try (Statement statement = connection.createStatement()) {
             System.out.println("Database connection established.");
             String query = "SELECT " +
                     "member_id, " +
                     "members.member_name " +
-                    "FROM maringodatabase.members "+
-                    "WHERE member_id = "+ searchID;
+                    "FROM maringodatabase.members " +
+                    "WHERE member_id = " + searchID;
 
             try (ResultSet resultSet = statement.executeQuery(query)) {
-                while (resultSet.next()) {
+                if (resultSet.next()) {
                     String id = resultSet.getString("member_id");
                     String name = resultSet.getString("member_name");
-                    queryString = ("ID: "+ id +" \t Name: " + name);
+                    queryString = ("ID: " + id + " \t Name: " + name);
+                    resultLabel.setText(queryString);
+                } else {
+                    resultLabel.setText("Member not found");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return queryString;
     }
     private boolean deleteMember(int memberId) {
         try {

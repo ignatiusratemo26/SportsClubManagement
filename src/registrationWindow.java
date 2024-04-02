@@ -42,7 +42,7 @@ public class registrationWindow extends JFrame {
         gp.add(male);
         gp.add(female);
         
-        String gender[] = {"","Male", "Female"};
+        String gender[] = {"Select gender","Male", "Female"};
         genderField = new JComboBox(gender);
         nokField = new javax.swing.JTextField(8);
         dobField = new JTextField(8);

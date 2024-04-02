@@ -79,7 +79,7 @@ public class homeScreenFrame extends JFrame{
         checkMembershipLabel.addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                new CheckStatusFrame();
+                new CheckStatusFrame1();
             }
             @Override
             public void mousePressed(MouseEvent e) {}

@@ -211,7 +211,24 @@ public class registrationWindow extends JFrame {
             JOptionPane.showMessageDialog(null, "Registration complete");
             }                       
             });
-        
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Clear all input fields
+                nameField.setText("");
+                nokField.setText("");
+                male.setSelected(false);
+                female.setSelected(false);
+                dobField.setText("");
+                contactField.setText("");
+                subcountyField.setSelectedIndex(0);
+                institutionField.setText("");
+                gameField.setSelectedIndex(0);
+                weightField.setText("");
+                heightField.setText("");
+                regFeeField.setSelectedIndex(0);
+            }
+        });
         mainPanel.add(nameLabel);
         mainPanel.add(nameField, "wrap");
         mainPanel.add(nokLabel);

@@ -1,3 +1,4 @@
+import java.sql.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ public class purchaseWindow extends JFrame{
     private JLabel socksLabel,sportShoeLabel,totalText,tracksuitLabel,tshirtLabel,wrapperLabel;
     private JLabel mainLabel;
     private String receiptText = "";
+    Connection connection = DBConnectionManager.getConnection();
     
     public purchaseWindow(){
         setSize(200,400);        
@@ -96,34 +98,42 @@ public class purchaseWindow extends JFrame{
                     if (shoeBox.isSelected()) {
                         int value8 = (Integer) shoeSpinner.getValue();
                         receipt.append(value8).append(" x Sneakers @2000/=").append(" : Ksh.").append(value8 * 2000).append("\n");
+                        updateStockLevel( "Sports shoes",value8);
                     }
                     if (shortsBox.isSelected()) {
                         int value7 = (Integer) shortsSpinner.getValue();
                         receipt.append(value7).append(" x Shorts @750/=").append(" : Ksh.").append(value7 * 750).append("\n");
+                        updateStockLevel( "Games shorts",value7);
                     }
                     if (tracksuitBox.isSelected()) {
                         int value1 = (Integer) tracksuitSpinner.getValue();
                         receipt.append(value1).append(" x TrackSuit @1000/=").append(" : Ksh.").append(value1 * 1000).append("\n");
+                        updateStockLevel( "Track suit",value1);
                     }
                     if (bloomerBox.isSelected()) {
                         int value2 = (Integer) bloomerSpinner.getValue();
                         receipt.append(value2).append(" x Bloomer @250/=").append(" : Ksh.").append(value2 * 250).append("\n");
+                        updateStockLevel( "Bloomer",value2);
                     }
                     if (hockeyBox.isSelected()) {
                         int value3 = (Integer) hockeySpinner.getValue();
                         receipt.append(value3).append(" x Hockey stick @2000/=").append(" : Ksh.").append(value3 * 2000).append("\n");
+                        updateStockLevel( "Hockey stick",value3);
                     }
                     if (wrapperBox.isSelected()) {
                         int value4 = (Integer) wrapperSpinner.getValue();
                         receipt.append(value4).append(" x Wrapper @450/=").append(" : Ksh.").append(value4 * 450).append("\n");
+                        updateStockLevel( "Wrapper",value4);
                     }
                     if (socksBox.isSelected()) {
                         int value5 = (Integer) socksSpinner.getValue();
                         receipt.append(value5).append(" x Socks @350/=").append(" : Ksh.").append(value5 * 350).append("\n");
+                        updateStockLevel( "Socks",value5);
                     }
                     if (tshirtBox.isSelected()) {
                         int value6 = (Integer) tshirtSpinner.getValue();
                         receipt.append(value6).append(" x T-shirt @800/=").append(" : Ksh.").append(value6 * 800).append("\n");
+                        updateStockLevel( "T-shirt",value6);
                     }
 
                     receipt.append("\nTotal: Ksh.").append(totalText.getText());
@@ -457,5 +467,20 @@ public class purchaseWindow extends JFrame{
         setBackground(Color.WHITE);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.WHITE);
+    }
+    public void updateStockLevel(String item, int itemQty){
+        
+        String query = "UPDATE items SET stock_level = stock_level - ? WHERE item_name = ?";
+        
+        try{
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, itemQty);
+            ps.setString(2, item);
+            ps.executeUpdate();
+            
+        } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null,"An error occurred.");
+        }
     }
 }
